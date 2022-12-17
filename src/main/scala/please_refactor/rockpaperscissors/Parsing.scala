@@ -62,7 +62,7 @@ object Parsing {
   }
 
   def go = {
-    val P = fpinscala.parsing.Reference
+    vala P = fpinscala.parsing.Reference0
     import fpinscala.parsing.ReferenceTypes.Parser
     val json: Parser[JSON] = JSON.jsonParser(P)
     val resultOfParsing = P.run(json)(tournamentConfig.json) // this parses JSON input into a JSON object
@@ -72,7 +72,7 @@ object Parsing {
                         tournaments: Int,
                         roundsPerMatch: Int,
                         randomSeed: Double,
-                        players: List[name:String,type:String,weights:String,Map[rock:String,]]
+                        players: List[Player]
                       )
 
   def betterUnpackUsingForComprehension(json: JSON): Either[ParseError, SampleDTO] =
