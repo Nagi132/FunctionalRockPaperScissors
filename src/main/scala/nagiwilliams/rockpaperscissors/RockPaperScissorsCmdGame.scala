@@ -6,6 +6,10 @@ import scala.io.StdIn.readLine
 
 object RockPaperScissorsCmdGame {
   def main(args: Array[String]) = {
+
+    val seasonDTO = InputDeserializer.parseInput("foo")
+
+    /*
     greeting
     print("Enter 1 for live game play. Enter 2 for automatic tournament season: ")
     readLine() match {
@@ -14,6 +18,8 @@ object RockPaperScissorsCmdGame {
       case _ => println("Response not understood.")
     }
     goodbye
+
+     */
   }
   private def greeting = println("Welcome to Rock-Paper-Scissors")
   private def goodbye = println("Thanks for playing Rock-Paper-Scissors")
