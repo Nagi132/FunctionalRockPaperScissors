@@ -1,6 +1,6 @@
 package nagiwilliams.rockpaperscissors
 
-import fpinscala.parsing.JSON.{JArray, JBool, JNumber, JObject, JString}
+import fpinscala.parsing.JSON.{JArray, JNumber, JObject, JString}
 import fpinscala.parsing.{JSON, Location, ParseError}
 import fpinscala.parsing.ReferenceTypes.Parser
 
@@ -91,38 +91,39 @@ object InputDeserializer {
           case jString: JString => Right(jString.get)
           case _ => Left(ParseError(List((Location("Could not unpack name"), "name"))))
         }
-        "type" <- jObject.get("type") match {
+        playerType <- jObject.get("type") match {
           case jString: JString => Right(jString.get)
           case _ => Left(ParseError(List((Location("Could not unpack type"), "type"))))
         }
         weights <- jObject.get("weights") match {
-          case jNumber: JNumber => Right(jNumber.get)
-          case None => Right(None)
+          case jObject: JObject =>
+            for {
+              rock <- unpackNumber(jObject, "rock")
+              paper <- unpackNumber(jObject, "paper")
+              scissors <- unpackNumber(jObject, "scissors")
+            } yield Some(Map("rock" -> rock, "paper" -> paper, "scissors" -> scissors))
+          //case None => Right(None)
           case _ => Left(ParseError(List((Location("Could not unpack weights"), "weights"))))
         }
-      } yield Player(name, "type", weights)
+      } yield Player(name, playerType, weights)
     case _ => Left(ParseError(List((Location("Could not unpack players"), "players"))))
   }
 
-  def parseWeight(json: JSON): Either[ParseError, Map[String, Double]] = json match {
-    case jObject: JObject =>
-      for {
-        rock <- unpackNumber(jObject, "rock")
-        paper <- unpackNumber(jObject, "paper")
-        scissors <- unpackNumber(jObject, "scissors")
-      } yield Map("rock" -> rock, "paper" -> paper, "scissors" -> scissors)
-    case _ => Left(ParseError(List((Location("Could not unpack weights"), "weights"))))
-  }
-
+  //  def parseWeight(json: JSON): Either[ParseError, Map[String, Double]] = json match {
+  //    case jObject: JObject =>
+  //      for {
+  //        rock <- unpackNumber(jObject, "rock")
+  //        paper <- unpackNumber(jObject, "paper")
+  //        scissors <- unpackNumber(jObject, "scissors")
+  //      } yield Map("rock" -> rock, "paper" -> paper, "scissors" -> scissors)
+  //    case None => Right(Map.empty[String, Double])
+  //    case _ => Left(ParseError(List((Location("Could not unpack weights"), "weights"))))
+  //  }
 
   def unpackNumber(jObject: JObject, key: String): Either[ParseError, Double] = jObject.get(key) match {
     case jNumber: JNumber => Right(jNumber.get)
     case _ => Left(ParseError(List((Location("Could not unpack ticker"), "ticker"))))
   }
 
-  def unpackString(jObject: JObject, key: String): Either[ParseError, String] = jObject.get(key) match {
-    case jString: JString => Right(jString.get)
-    case _ => Left(ParseError(List((Location("Could not unpack ticker"), "ticker"))))
-  }
 
 }

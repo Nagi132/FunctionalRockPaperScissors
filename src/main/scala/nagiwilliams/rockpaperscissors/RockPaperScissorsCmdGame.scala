@@ -7,8 +7,7 @@ import scala.io.StdIn.readLine
 object RockPaperScissorsCmdGame {
   def main(args: Array[String]) = {
 
-    val seasonDTO = InputDeserializer.parseInput("foo")
-    val game=new RockPaperScissorsCmdGame()
+    //val seasonDTO = InputDeserializer.parseInput("foo")
 
     /*
     greeting
