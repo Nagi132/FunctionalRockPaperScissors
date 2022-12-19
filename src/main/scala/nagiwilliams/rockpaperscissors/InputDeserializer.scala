@@ -57,10 +57,12 @@ object InputDeserializer {
   ]
 }
   """
-
+def go={
   val P = fpinscala.parsing.Reference
   val json: Parser[JSON] = JSON.jsonParser(P)
-
+  val resultOfParsing=P.run(json)(jsonTxt_3)
+  resultOfParsing.flatMap(j=>parseConfig(j).map(dto=>println(dto)).map(_=>()))
+}
   def parseConfig(json: JSON): Either[ParseError, Config] = json match {
     case jObject: JObject =>
       for {
@@ -108,17 +110,6 @@ object InputDeserializer {
       } yield Player(name, playerType, weights)
     case _ => Left(ParseError(List((Location("Could not unpack players"), "players"))))
   }
-
-  //  def parseWeight(json: JSON): Either[ParseError, Map[String, Double]] = json match {
-  //    case jObject: JObject =>
-  //      for {
-  //        rock <- unpackNumber(jObject, "rock")
-  //        paper <- unpackNumber(jObject, "paper")
-  //        scissors <- unpackNumber(jObject, "scissors")
-  //      } yield Map("rock" -> rock, "paper" -> paper, "scissors" -> scissors)
-  //    case None => Right(Map.empty[String, Double])
-  //    case _ => Left(ParseError(List((Location("Could not unpack weights"), "weights"))))
-  //  }
 
   def unpackNumber(jObject: JObject, key: String): Either[ParseError, Double] = jObject.get(key) match {
     case jNumber: JNumber => Right(jNumber.get)
