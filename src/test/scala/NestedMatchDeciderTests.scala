@@ -1,4 +1,4 @@
-
+import nagiwilliams.rockpaperscissors.NestedMatchDecider.beats
 
 class NestedMatchDeciderTests extends MatchDeciderTests {
   "NestedMatchDecider" should "judge rock-paper-scissors moves correctly with valid inputs" in {
